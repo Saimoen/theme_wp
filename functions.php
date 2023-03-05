@@ -18,8 +18,10 @@ function montheme_register_assets()
     wp_register_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css');
     wp_register_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js', ['popper'], null, true);
     wp_register_script('popper', 'https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js', [], null, true);
+    wp_register_script('jquery', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js', [], null, true);
     wp_enqueue_style('bootstrap');
     wp_enqueue_script('bootstrap');
+    wp_enqueue_script('jquery');
 }
 
 function montheme_title_separator()
@@ -88,6 +90,16 @@ function montheme_init()
         'hierarchical' => true,
         'show_admin_column' => true,
     ]);
+    register_post_type('bien', [
+        'label' => 'Bien',
+        'public' => true,
+        'menu_position' => 3,
+        'menu_icon' => 'dashicons-building',
+        'supports' => ['title', 'editor', 'thumbnail'],
+        'show_in_rest' => true,
+        'has_archive' => true,
+
+    ]);
 }
 
 add_action('init', 'montheme_init');
@@ -99,7 +111,9 @@ add_filter('nav_menu_css_class', 'montheme_menu_class');
 add_filter('nav_menu_link_attributes', 'montheme_menu_link_class');
 
 require_once('metaboxes/sponso.php');
+require_once('options/agence.php');
 
 SponsoMetaBox::register();
+AgenceMenuPage::register();
 
 ?>
