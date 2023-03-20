@@ -127,20 +127,20 @@ add_filter('manage_bien_posts_columns', function ($columns) {
     ];
 });
 
-add_filter('manage_bien_posts_custom_column', function ($column, $postId){
-    if($column === 'thumbnail') {
+add_filter('manage_bien_posts_custom_column', function ($column, $postId) {
+    if ($column === 'thumbnail') {
         the_post_thumbnail('thumbnail', $postId);
     }
 }, 10, 2);
 
-add_action('admin_enqueue_scripts', function() {
+add_action('admin_enqueue_scripts', function () {
     wp_enqueue_style('admin_montheme', get_template_directory_uri() . '/assets/admin.css');
 });
 
 add_filter('manage_post_posts_columns', function ($columns) {
     $newColumns = [];
-    foreach($columns as $k => $v) {
-        if($k === 'date'){
+    foreach ($columns as $k => $v) {
+        if ($k === 'date') {
             $newColumns['sponso'] = 'Article sponsorisé ?';
         }
         $newColumns[$k] = $v;
@@ -148,9 +148,9 @@ add_filter('manage_post_posts_columns', function ($columns) {
     return $newColumns;
 });
 
-add_filter('manage_post_posts_custom_column', function ($column, $postId){
-    if($column === 'sponso') {
-        if(!empty(get_post_meta($postId, SponsoMetaBox::META_KEY, true))) {
+add_filter('manage_post_posts_custom_column', function ($column, $postId) {
+    if ($column === 'sponso') {
+        if (!empty(get_post_meta($postId, SponsoMetaBox::META_KEY, true))) {
             $class = 'yes';
         } else {
             $class = 'no';
@@ -159,11 +159,12 @@ add_filter('manage_post_posts_custom_column', function ($column, $postId){
     }
 }, 10, 2);
 
-function montheme_pre_get_posts(WP_Query $query) {
-    if(is_admin() || !is_home() || !$query->is_main_query()) {
+function montheme_pre_get_posts(WP_Query $query)
+{
+    if (is_admin() || !is_home() || !$query->is_main_query()) {
         return;
     }
-    if(get_query_var('sponso') === '1'){
+    if (get_query_var('sponso') === '1') {
         $meta_query = $query->get('meta_query', []);
         $meta_query[] = [
             'key' => SponsoMetaBox::META_KEY,
@@ -173,13 +174,32 @@ function montheme_pre_get_posts(WP_Query $query) {
     }
 }
 
-function montheme_query_vars($params) {
+function montheme_query_vars($params)
+{
     $params[] = 'sponso';
     return $params;
 }
 
 
 add_action('pre_get_posts', 'montheme_pre_get_posts');
-add_filter('query_vars', 'montheme_query_vars')
+add_filter('query_vars', 'montheme_query_vars');
+
+require_once 'widgets/YoutubeWidget.php';
+
+function montheme_register_widget()
+{
+    register_widget(YoutubeWidget::class);
+    register_sidebar([
+        'id' => 'homepage',
+        'name' => 'Sidebar Accueil',
+        'before_widget' => '<div class="p-4 %2$s" id="%1$s">',
+        'after_widget' => '</div>',
+        'before_title' => ' <h4 class="fst-italic">',
+        'after_title' => '</h4>',
+    ]);
+}
+
+
+add_action('widgets_init', 'montheme_register_widget');
 
 ?>
