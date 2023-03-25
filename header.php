@@ -10,7 +10,8 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4"
+        style="background-color: <?= get_theme_mod('header_background') ?>!important">
         <a class="navbar-brand" href="#">
             <?php bloginfo('name') ?>
         </a>

@@ -19,24 +19,30 @@
 
         <?php the_content() ?>
 
+        <?php
+        if (comments_open() || get_comments_number()) {
+            comments_template();
+        }
+        ?>
+
         <h2>Articles relatifs</h2>
 
         <div class="row">
-        <?php 
-        $sports = array_map(function ($term) {
-            return $term->term_id;
-        }, get_the_terms(get_post(), 'sport'));
-        $query = new WP_Query([
-            'post__not_in' => [get_the_ID()],
-            'post_type' => 'post',
-            'posts_per_page' => 3,
-            'orderby' => 'rand',
-            'tax_query' => [
-                [
-                'taxonomy' => 'sport',
-                'terms' => $sports,
-                'operator' => 'AND'
-                ]
+            <?php
+            $sports = array_map(function ($term) {
+                return $term->term_id;
+            }, get_the_terms(get_post(), 'sport'));
+            $query = new WP_Query([
+                'post__not_in' => [get_the_ID()],
+                'post_type' => 'post',
+                'posts_per_page' => 3,
+                'orderby' => 'rand',
+                'tax_query' => [
+                    [
+                        'taxonomy' => 'sport',
+                        'terms' => $sports,
+                        'operator' => 'AND'
+                    ]
                 ],
                 'meta_query' => [
                     [
@@ -44,15 +50,17 @@
                         'compare' => 'EXISTS'
                     ]
                 ]
-        ]);
-        while($query->have_posts()): $query->the_post();
-        ?>
+            ]);
+            while ($query->have_posts()):
+                $query->the_post();
+                ?>
 
-            <div class="col-sm-4">
-                <?php get_template_part('parts/card', 'post'); ?>
-            </div>
+                <div class="col-sm-4">
+                    <?php get_template_part('parts/card', 'post'); ?>
+                </div>
 
-        <?php endwhile; wp_reset_postdata(); ?>
+            <?php endwhile;
+            wp_reset_postdata(); ?>
         </div>
 
     <?php endwhile; endif ?>
