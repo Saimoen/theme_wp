@@ -2,6 +2,7 @@
 
 require_once('walker/CommentWalker.php');
 require_once('options/apparence.php');
+require_once('options/cron.php');
 
 function montheme_supports()
 {
@@ -93,16 +94,6 @@ function montheme_init()
         'show_in_rest' => true,
         'hierarchical' => true,
         'show_admin_column' => true,
-    ]);
-    register_post_type('bien', [
-        'label' => 'Bien',
-        'public' => true,
-        'menu_position' => 3,
-        'menu_icon' => 'dashicons-building',
-        'supports' => ['title', 'editor', 'thumbnail'],
-        'show_in_rest' => true,
-        'has_archive' => true,
-
     ]);
 }
 
@@ -223,4 +214,30 @@ add_action('after_setup', function () {
     load_theme_textdomain('montheme', get_template_directory() . './languages');
 });
 
-?>
+/** @var wpdb $wpdb */
+global $wpdb;
+
+$tag = "tag1";
+$query = $wpdb->prepare("SELECT name FROM wp_terms WHERE slug=%s", [$tag]);
+
+$results = $wpdb->get_results($query);
+
+/* Différentes requêtes à la base de donnée
+$results = $wpdb->get_row("SELECT * FROM wp_terms WHERE slug=\"tag1\"", ARRAY_A);
+$results = $wpdb->get_var("SELECT name FROM wp_terms WHERE slug=\"tag1\"", ARRAY_A);
+*/
+
+/** Api */
+
+add_action('rest_api_init', function () {
+    register_rest_route('montheme/v1', '/demo', [
+        'methods' => 'GET',
+        'callback' => function () {
+            $response = new WP_REST_Response(['success' => 'Bonjour les gens!']);
+            $response->set_status(201);
+            return $response;
+        }
+    ]);
+})
+
+    ?>
