@@ -11,27 +11,28 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4"
-        style="background-color: <?= get_theme_mod('header_background') ?>!important">
-        <a class="navbar-brand" href="#">
-            <?php bloginfo('name') ?>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <?php wp_nav_menu([
-                'theme_location' => 'header',
-                'container' => false,
-                'menu_class' => 'navbar-nav me-auto mb-2 mb-lg-0'
-            ]) ?>
-            </li>
-            </ul>
-            <?= get_search_form() ?>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #FFD200!important;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="http://localhost/wordpress/wp-content/themes/pincolonnaire/assets/logo.png" style="width: 190px;
+                     height: 135px;" alt="Logo du site">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                    <?php wp_nav_menu([
+                        'theme_location' => 'header',
+                        'container' => false,
+                        'menu_class' => 'navbar-nav me-auto mb-2 mb-lg-0'
+                    ]) ?>
+                </ul>
+                <form class="d-flex" role="search">
+                    <?= get_search_form() ?>
+                </form>
+            </div>
         </div>
     </nav>
-
-
-
-    <div class="container">
